@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateUserDto, SignInUserDto } from './dto-for-auth/';
 import { PrismaService } from 'src/prisma.service';
 import { handleAuthErrors } from 'src/decorators/handle-auth-errors';
