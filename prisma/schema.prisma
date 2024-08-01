@@ -13,15 +13,112 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+enum Language {
+  ES
+  EN
+}
+enum Theme {
+  DARK
+  LIGHT
+}
+
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  email     String
-  password  String
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  firstName   String
+  lastName    String
+  email       String      @unique()
+  password    String
+  role        UserRole    @default(USER)
+  collections Collection[]
+  userPreferences UserPreferences?
+  likes       Likes[]
+  comments    Comments[]
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
+}
+
+model UserPreferences {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  user          User   @relation(fields: [userId], references: [id])
+  userId        String    @unique @db.ObjectId
+
+  language      Language
+  Theme         Theme
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+
+model Collection {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String   @db.ObjectId
+
+  name          String 
+  description   String
+  category      String
+  imageId       String?
+  customFields  Json   
+  items         Item[]
+
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+}
+
+
+
+model Tags  {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  items         Item[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+
+}
+model Item {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  collection    Collection @relation(fields: [collectionId], references: [id])
+  collectionId  String     @db.ObjectId
+
+  tag           Tags       @relation(fields: [tagId], references: [id])
+  tagId         String     @db.ObjectId
+
+  likes         Likes[]
+  comments      Comments[]
+  
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+
+model Likes { 
+    id            String   @id @default(auto()) @map("_id") @db.ObjectId
+    item          Item     @relation(fields: [itemId], references: [id])
+    itemId        String   @db.ObjectId
+
+    user         User      @relation(fields: [userId], references: [id])
+    userId       String    @db.ObjectId
+
+}
+
+model Comments {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  item          Item     @relation(fields: [itemId], references: [id])
+  itemId        String     @db.ObjectId
+
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @db.ObjectId
+  content      String
 }
