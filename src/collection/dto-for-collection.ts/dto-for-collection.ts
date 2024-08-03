@@ -51,13 +51,18 @@ export class CreateCollectionDto {
   @IsString()
   category: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   imageId: string;
+}
+export class UpdateCollectionDto {
+  @IsString()
+  name: string;
+
+  @IsString()
+  description: string;
 
   @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => CustomFieldDto)
-  customFields: CustomFields[];
+  @IsString()
+  imageId: string;
 }
