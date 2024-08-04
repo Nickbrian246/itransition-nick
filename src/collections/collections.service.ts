@@ -13,14 +13,22 @@ import {
 export class CollectionsService {
   constructor(private prisma: PrismaService) {}
   @errorHandler()
-  async getMyCollection(id: string, user: UserDecoded) {
+  async getCollectionById(id: string) {
     return await this.prisma.collection.findFirstOrThrow({
       where: { id: id },
     });
   }
 
   @errorHandler()
-  async getMyCollections(user: UserDecoded) {
+  async getCollectionItemsById(collectionId: string) {
+    return await this.prisma.collection.findFirstOrThrow({
+      where: { id: collectionId },
+      include: { items: true },
+    });
+  }
+
+  @errorHandler()
+  async getUserCollections(user: UserDecoded) {
     return await this.prisma.collection.findMany({
       where: { userId: user.id },
     });
@@ -42,13 +50,12 @@ export class CollectionsService {
   }
 
   @errorHandler()
-  async updateMy(
+  async updateCollectionById(
     collection: UpdateCollectionDto,
     collectionId: string,
-    user: UserDecoded,
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.update({
-      where: { id: collectionId, userId: user.id },
+      where: { id: collectionId },
       data: { ...collection },
     });
 
@@ -56,12 +63,11 @@ export class CollectionsService {
   }
 
   @errorHandler()
-  async deleteMyCollection(
+  async deleteCollectionById(
     collectionId: string,
-    user: UserDecoded,
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.delete({
-      where: { id: collectionId, userId: user.id },
+      where: { id: collectionId },
     });
 
     return { data };

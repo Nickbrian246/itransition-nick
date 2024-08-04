@@ -14,18 +14,27 @@ import {
   CreateCollectionDto,
   UpdateCollectionDto,
 } from './dto-for-collections';
+import { Public } from 'src/decorators/public-route';
 
 @Controller('collections')
 export class CollectionsController {
   constructor(private collectionsService: CollectionsService) {}
+
+  @Public()
   @Get(':id')
-  GetCollection(@Param('id') id: string, @GetUser() user: UserDecoded) {
-    return this.collectionsService.getMyCollection(id, user);
+  GetCollection(@Param('id') id: string) {
+    return this.collectionsService.getCollectionById(id);
   }
 
-  @Get('/collection/item')
-  GetCollections(@GetUser() user: UserDecoded) {
-    return this.collectionsService.getMyCollections(user);
+  @Public()
+  @Get('/:id/item')
+  GetItemsFromCollection(@Param('id') id: string) {
+    return this.collectionsService.getCollectionItemsById(id);
+  }
+
+  @Get('')
+  GetUserCollections(@GetUser() user: UserDecoded) {
+    return this.collectionsService.getUserCollections(user);
   }
 
   @Post()
@@ -37,16 +46,15 @@ export class CollectionsController {
   }
 
   @Put(':id')
-  updateCollection(
+  updateCollectionById(
     @Param('id') id: string,
     @Body() collection: UpdateCollectionDto,
-    @GetUser() user: UserDecoded,
   ) {
-    return this.collectionsService.updateMy(collection, id, user);
+    return this.collectionsService.updateCollectionById(collection, id);
   }
 
   @Delete(':id')
-  deleteCollection(@Param('id') id: string, @GetUser() user: UserDecoded) {
-    return this.collectionsService.deleteMyCollection(id, user);
+  deleteCollectionById(@Param('id') id: string) {
+    return this.collectionsService.getCollectionById(id);
   }
 }
