@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { Collection } from '@prisma/client';
+import { errorHandler } from 'src/decorators/error-handler';
 import { PrismaService } from 'src/prisma.service';
+import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
+import { UserDecoded } from 'src/types/user';
 import {
   CreateCollectionDto,
   UpdateCollectionDto,
-} from './dto-for-collection.ts/dto-for-collection';
-import { errorHandler } from 'src/decorators/error-handler';
-import { UserDecoded } from 'src/types/user';
-import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
-import { Collection } from '@prisma/client';
+} from './dto-for-collections';
 
 @Injectable()
-export class CollectionService {
+export class CollectionsService {
   constructor(private prisma: PrismaService) {}
   @errorHandler()
   async getMyCollection(id: string, user: UserDecoded) {

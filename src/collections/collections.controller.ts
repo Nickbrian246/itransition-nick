@@ -7,26 +7,25 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { CollectionsService } from './collections.service';
 import { GetUser } from 'src/decorators/get-user';
 import { UserDecoded } from 'src/types/user';
-import { CollectionService } from './collection.service';
 import {
   CreateCollectionDto,
   UpdateCollectionDto,
-} from './dto-for-collection.ts/dto-for-collection';
+} from './dto-for-collections';
 
-@Controller('collection')
-export class CollectionController {
-  constructor(private collectionService: CollectionService) {}
-
+@Controller('collections')
+export class CollectionsController {
+  constructor(private collectionsService: CollectionsService) {}
   @Get(':id')
   GetCollection(@Param('id') id: string, @GetUser() user: UserDecoded) {
-    return this.collectionService.getMyCollection(id, user);
+    return this.collectionsService.getMyCollection(id, user);
   }
 
   @Get('/collection/item')
   GetCollections(@GetUser() user: UserDecoded) {
-    return this.collectionService.getMyCollections(user);
+    return this.collectionsService.getMyCollections(user);
   }
 
   @Post()
@@ -34,7 +33,7 @@ export class CollectionController {
     @Body() collection: CreateCollectionDto,
     @GetUser() user: UserDecoded,
   ) {
-    return this.collectionService.createMy(collection, user);
+    return this.collectionsService.createMy(collection, user);
   }
 
   @Put(':id')
@@ -43,11 +42,11 @@ export class CollectionController {
     @Body() collection: UpdateCollectionDto,
     @GetUser() user: UserDecoded,
   ) {
-    return this.collectionService.updateMy(collection, id, user);
+    return this.collectionsService.updateMy(collection, id, user);
   }
 
   @Delete(':id')
   deleteCollection(@Param('id') id: string, @GetUser() user: UserDecoded) {
-    return this.collectionService.deleteMyCollection(id, user);
+    return this.collectionsService.deleteMyCollection(id, user);
   }
 }
