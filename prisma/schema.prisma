@@ -25,6 +25,11 @@ enum Theme {
   DARK
   LIGHT
 }
+enum TypeCustomField {
+  STRING
+  INT
+  BOOLEAN
+}
 
 
 model User {
@@ -90,18 +95,17 @@ model Category {
 }
 
 model CustomFields {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  collection    Collection  @relation(fields: [collectionId], references: [id])
-  collectionId  String      @db.ObjectId
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  collection    Collection        @relation(fields: [collectionId], references: [id])
+  collectionId  String            @db.ObjectId
 
   
   name          String
-  valueStr      String?
-  valueInt      Int?
-  valueBol      Boolean? 
+  value         String?
+  type          TypeCustomField 
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt        
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt        
 }
 
 

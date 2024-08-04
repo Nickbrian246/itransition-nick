@@ -20,17 +20,17 @@ export class CollectionController {
   constructor(private collectionService: CollectionService) {}
 
   @Get(':id')
-  collection(@Param('id') id: string, @GetUser() user: UserDecoded) {
+  GetCollection(@Param('id') id: string, @GetUser() user: UserDecoded) {
     return this.collectionService.getMyCollection(id, user);
   }
 
-  @Get()
-  collections(@GetUser() user: UserDecoded) {
+  @Get('/collection/item')
+  GetCollections(@GetUser() user: UserDecoded) {
     return this.collectionService.getMyCollections(user);
   }
 
   @Post()
-  create(
+  createCollection(
     @Body() collection: CreateCollectionDto,
     @GetUser() user: UserDecoded,
   ) {
@@ -38,7 +38,7 @@ export class CollectionController {
   }
 
   @Put(':id')
-  update(
+  updateCollection(
     @Param('id') id: string,
     @Body() collection: UpdateCollectionDto,
     @GetUser() user: UserDecoded,
@@ -47,7 +47,7 @@ export class CollectionController {
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string, @GetUser() user: UserDecoded) {
+  deleteCollection(@Param('id') id: string, @GetUser() user: UserDecoded) {
     return this.collectionService.deleteMyCollection(id, user);
   }
 }
