@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
-import { CreateTagDto } from './dto-for-tag/dto-for-tag';
 import { errorHandler } from 'src/decorators/error-handler';
+import { PrismaService } from 'src/prisma.service';
+import { CreateTagDto } from './dto-for-tags/dto-for-create-tags';
 
 @Injectable()
-export class TagService {
+export class TagsService {
   constructor(private prisma: PrismaService) {}
 
   async getAll() {

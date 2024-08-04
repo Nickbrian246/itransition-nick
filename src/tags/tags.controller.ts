@@ -1,28 +1,28 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { TagService } from './tag.service';
-import { CreateTagDto } from './dto-for-tag/dto-for-tag';
 import { Public } from 'src/decorators/public-route';
+import { TagsService } from './tags.service';
+import { CreateTagDto } from './dto-for-tags/dto-for-create-tags';
 
-@Controller('tag')
-export class TagController {
-  constructor(private tagService: TagService) {}
+@Controller('tags')
+export class TagsController {
+  constructor(private tagsService: TagsService) {}
 
   @Public()
   @Get(':id')
   get(@Param() id: string) {
-    return this.tagService.get(id);
+    return this.tagsService.get(id);
   }
 
   @Public()
   @Get()
   getAll() {
-    return this.tagService.getAll();
+    return this.tagsService.getAll();
   }
 
   @Public()
   @Post()
   create(@Body() tag: CreateTagDto) {
-    return this.tagService.create(tag);
+    return this.tagsService.create(tag);
   }
 
   @Delete(':id')
