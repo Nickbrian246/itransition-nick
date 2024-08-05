@@ -11,6 +11,13 @@ export class ItemsService {
   constructor(private prismaService: PrismaService) {}
 
   @errorHandler()
+  async getAllItems(): Promise<ApiSuccessFullResponse<Item[]>> {
+    const data = await this.prismaService.item.findMany();
+
+    return { data };
+  }
+
+  @errorHandler()
   async getItemById(id: string): Promise<ApiSuccessFullResponse<Item>> {
     const item = await this.prismaService.item.findFirstOrThrow({
       where: { id },

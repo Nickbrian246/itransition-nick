@@ -15,6 +15,7 @@ import { CustomFieldsService } from './custom-fields/custom-fields.service';
 import { ItemsModule } from './items/items.module';
 import { TagsModule } from './tags/tags.module';
 import { CommentsModule } from './comments/comments.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { CommentsModule } from './comments/comments.module';
     ItemsModule,
     TagsModule,
     CommentsModule,
+    LikesModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [
