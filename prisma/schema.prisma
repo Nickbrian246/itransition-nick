@@ -124,7 +124,7 @@ model Tags  {
 }
 model Item {
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
-
+  name           String
   collection     Collection      @relation(fields: [collectionId], references: [id])
   collectionId   String          @db.ObjectId
 
