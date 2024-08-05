@@ -35,6 +35,14 @@ export class CollectionsService {
   }
 
   @errorHandler()
+  async getCollectionAndCustomFields(id: string) {
+    return await this.prisma.collection.findMany({
+      where: { id: id },
+      include: { customFields: true },
+    });
+  }
+
+  @errorHandler()
   async createMy(
     collection: CreateCollectionDto,
     user: UserDecoded,

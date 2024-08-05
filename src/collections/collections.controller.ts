@@ -32,6 +32,11 @@ export class CollectionsController {
     return this.collectionsService.getCollectionItemsById(id);
   }
 
+  @Get('/:id/custom-fields')
+  GetCollectionAndCustomFieldsById(@Param('id') id: string) {
+    return this.collectionsService.getCollectionAndCustomFields(id);
+  }
+
   @Get('')
   GetUserCollections(@GetUser() user: UserDecoded) {
     return this.collectionsService.getUserCollections(user);
