@@ -7,11 +7,13 @@ import { CreateTagDto } from './dto-for-tags/dto-for-create-tags';
 export class TagsService {
   constructor(private prisma: PrismaService) {}
 
+  @errorHandler()
   async getAll() {
     const data = await this.prisma.tags.findMany();
     return { data };
   }
 
+  @errorHandler()
   async get(id: string) {
     const data = await this.prisma.tags.findFirstOrThrow({ where: { id } });
     return { data };

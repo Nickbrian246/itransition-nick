@@ -9,13 +9,14 @@ import { JwtAuthGuard } from './auth/guards/guard-for-jwt';
 
 import { CategoriesModule } from './categories/categories.module';
 import { CollectionsModule } from './collections/collections.module';
+import { CommentsModule } from './comments/comments.module';
 import { CustomFieldsController } from './custom-fields/custom-fields.controller';
 import { CustomFieldsModule } from './custom-fields/custom-fields.module';
 import { CustomFieldsService } from './custom-fields/custom-fields.service';
 import { ItemsModule } from './items/items.module';
-import { TagsModule } from './tags/tags.module';
-import { CommentsModule } from './comments/comments.module';
 import { LikesModule } from './likes/likes.module';
+import { TagsModule } from './tags/tags.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { LikesModule } from './likes/likes.module';
     TagsModule,
     CommentsModule,
     LikesModule,
+    UsersModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [

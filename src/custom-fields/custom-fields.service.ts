@@ -7,7 +7,6 @@ import {
   UpdateCustomFieldDto,
 } from './dto-for-custom-fields';
 import { errorHandler } from 'src/decorators/error-handler';
-import { handleAuthErrors } from 'src/decorators/handle-auth-errors';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { CustomFields } from '@prisma/client';
 
@@ -15,7 +14,7 @@ import { CustomFields } from '@prisma/client';
 export class CustomFieldsService {
   constructor(private prismaService: PrismaService) {}
 
-  @handleAuthErrors()
+  @errorHandler()
   async getCustomFieldsByCollectionId(
     id: string,
   ): Promise<ApiSuccessFullResponse<CustomFields[]>> {
