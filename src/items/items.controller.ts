@@ -22,6 +22,12 @@ export class ItemsController {
     return this.itemsService.getItemById(id);
   }
 
+  @Public()
+  @Get()
+  getAllItems() {
+    return this.itemsService.getAllItems();
+  }
+
   @Post()
   createItem(@Body() item: CreateItemDto) {
     return this.itemsService.createItem(item);
