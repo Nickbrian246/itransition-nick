@@ -12,7 +12,7 @@ export function errorHandler() {
       try {
         return await originalMethod.apply(this, args);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
 
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
           if (error.code === 'P2002') {
