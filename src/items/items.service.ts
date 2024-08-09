@@ -36,6 +36,7 @@ export class ItemsService {
         name: item.name,
         collectionId: item.collectionId,
         tagId: item.tagId,
+        authorId: item.authorId,
       },
     });
     return { data };

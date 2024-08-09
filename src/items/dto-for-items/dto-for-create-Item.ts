@@ -11,6 +11,9 @@ export class CreateItemDto {
   collectionId: string;
 
   @IsString()
+  authorId: string;
+
+  @IsString()
   tagId: string;
 
   @IsOptional()
