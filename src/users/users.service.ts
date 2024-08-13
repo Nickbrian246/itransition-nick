@@ -15,10 +15,19 @@ export class UsersService {
   }
 
   @errorHandler()
-  async getUserById(id: string): Promise<ApiSuccessFullResponse<User>> {
-    const data = await this.prismaService.user.findFirstOrThrow({
+  async getUserById(
+    id: string,
+  ): Promise<
+    ApiSuccessFullResponse<Pick<User, 'firstName' | 'email' | 'role'>>
+  > {
+    const user = await this.prismaService.user.findFirstOrThrow({
       where: { id: id },
     });
+    const data = {
+      email: user.email,
+      firstName: user.firstName,
+      role: user.role,
+    };
     return { data };
   }
 

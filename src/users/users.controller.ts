@@ -1,6 +1,8 @@
 import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { errorHandler } from 'src/decorators/error-handler';
+import { GetUser } from 'src/decorators/get-user';
+import { UserDecoded } from 'src/types/user';
 
 @Controller('users')
 export class UsersController {
@@ -11,9 +13,9 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @Get(':id')
-  getUserById(@Param('id') id: string) {
-    return this.usersService.getUserById(id);
+  @Get('user')
+  getUserById(@Param('id') id: string, @GetUser() user: UserDecoded) {
+    return this.usersService.getUserById(user.id);
   }
 
   @Get(':id/collections')
