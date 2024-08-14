@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Collection } from '@prisma/client';
+import { Collection, Prisma } from '@prisma/client';
 import { errorHandler } from 'src/decorators/error-handler';
 import { PrismaService } from 'src/prisma.service';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
@@ -32,6 +32,15 @@ export class CollectionsService {
     return await this.prisma.collection.findMany({
       where: { userId: user.id },
     });
+  }
+
+  @errorHandler()
+  async getLatestCollections(): Promise<ApiSuccessFullResponse<Collection[]>> {
+    const data = await this.prisma.collection.findMany({
+      include: { items: true },
+      orderBy: { updatedAt: 'desc' },
+    });
+    return { data };
   }
 
   @errorHandler()

@@ -37,6 +37,12 @@ export class CollectionsController {
     return this.collectionsService.getCollectionAndCustomFields(id);
   }
 
+  @Public()
+  @Get('/latest/feed')
+  GetLatestCollections() {
+    return this.collectionsService.getLatestCollections();
+  }
+
   @Get('')
   GetUserCollections(@GetUser() user: UserDecoded) {
     return this.collectionsService.getUserCollections(user);

@@ -51,8 +51,7 @@ export class AuthService {
       where: { email: user.email },
     });
     const IsMatchPassword = await compare(user.password, dbUser.password);
-    if (!IsMatchPassword)
-      throw new Error(`Incorrect password for ${user.email} email`);
+    if (!IsMatchPassword) throw new Error(`Incorrect password`);
 
     const access_token = await this.jwtService.signAsync({
       id: dbUser.id,

@@ -1,6 +1,5 @@
 import { Controller, Delete, Get, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { errorHandler } from 'src/decorators/error-handler';
 import { GetUser } from 'src/decorators/get-user';
 import { UserDecoded } from 'src/types/user';
 

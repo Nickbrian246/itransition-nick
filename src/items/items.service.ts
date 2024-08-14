@@ -5,6 +5,7 @@ import { errorHandler } from 'src/decorators/error-handler';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { Item } from '@prisma/client';
 import { UpdateItemDto } from './dto-for-items/dto-for-update-item';
+import { UserDecoded } from 'src/types/user';
 
 @Injectable()
 export class ItemsService {
@@ -30,13 +31,32 @@ export class ItemsService {
   }
 
   @errorHandler()
-  async createItem(item: CreateItemDto): Promise<ApiSuccessFullResponse<Item>> {
+  async getLatestItems(): Promise<ApiSuccessFullResponse<Item[]>> {
+    const item = await this.prismaService.item.findMany({
+      include: {
+        collection: { select: { name: true } },
+        author: { select: { firstName: true } },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+    // const data =
+    //   item.customFields && typeof item.customFields === 'string'
+    //     ? { ...item, customFields: JSON.parse(item.customFields) }
+    //     : item;
+    return { data: item };
+  }
+
+  @errorHandler()
+  async createItem(
+    item: CreateItemDto,
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<Item>> {
     const data = await this.prismaService.item.create({
       data: {
         name: item.name,
         collectionId: item.collectionId,
         tagId: item.tagId,
-        authorId: item.authorId,
+        authorId: user.id,
       },
     });
     return { data };

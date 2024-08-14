@@ -1,6 +1,24 @@
-import { CreateUserDto } from './dto-for-signup-user';
-import { OmitType, PickType } from '@nestjs/mapped-types';
-export class SignInUserDto extends PickType(CreateUserDto, [
-  'email',
-  'password',
-] as const) {}
+import {
+  IsString,
+  IsNotEmpty,
+  IsStrongPassword,
+  IsEmail,
+} from 'class-validator';
+
+export class SignInUserDto {
+  @IsString()
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsStrongPassword(
+    {
+      minUppercase: 1,
+      minLength: 8,
+      minSymbols: 1,
+    },
+    { message: 'Incorrect Password' },
+  )
+  password: string;
+}

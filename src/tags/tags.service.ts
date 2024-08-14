@@ -2,19 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { errorHandler } from 'src/decorators/error-handler';
 import { PrismaService } from 'src/prisma.service';
 import { CreateTagDto } from './dto-for-tags/dto-for-create-tags';
+import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
+import { Tags } from '@prisma/client';
 
 @Injectable()
 export class TagsService {
   constructor(private prisma: PrismaService) {}
 
   @errorHandler()
-  async getAll() {
+  async getAll(): Promise<ApiSuccessFullResponse<Tags[]>> {
     const data = await this.prisma.tags.findMany();
     return { data };
   }
 
   @errorHandler()
-  async get(id: string) {
+  async get(id: string): Promise<ApiSuccessFullResponse<Tags>> {
     const data = await this.prisma.tags.findFirstOrThrow({ where: { id } });
     return { data };
   }

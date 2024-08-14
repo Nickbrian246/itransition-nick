@@ -11,11 +11,18 @@ import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto-for-items';
 import { UpdateItemDto } from './dto-for-items/dto-for-update-item';
 import { Public } from 'src/decorators/public-route';
+import { GetUser } from 'src/decorators/get-user';
+import { UserDecoded } from 'src/types/user';
 
 @Controller('items')
 export class ItemsController {
   constructor(private itemsService: ItemsService) {}
 
+  @Public()
+  @Get('latest/feed')
+  getLatestItems() {
+    return this.itemsService.getLatestItems();
+  }
   @Public()
   @Get(':id')
   getItemById(@Param('id') id: string) {
@@ -29,8 +36,8 @@ export class ItemsController {
   }
 
   @Post()
-  createItem(@Body() item: CreateItemDto) {
-    return this.itemsService.createItem(item);
+  createItem(@Body() item: CreateItemDto, @GetUser() user: UserDecoded) {
+    return this.itemsService.createItem(item, user);
   }
 
   @Put(':id')
