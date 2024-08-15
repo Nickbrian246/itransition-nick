@@ -10,8 +10,9 @@ export class CreateItemDto {
   @IsString()
   collectionId: string;
 
+  @IsArray()
   @IsString()
-  tagId: string;
+  tagsIds: string[];
 
   @IsOptional()
   @IsArray()

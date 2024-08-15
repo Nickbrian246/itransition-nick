@@ -76,7 +76,7 @@ export class ItemsService {
       data: {
         name: item.name,
         collectionId: item.collectionId,
-        tagId: item.tagId,
+        tagIds: item.tagsIds,
         authorId: user.id,
       },
     });
