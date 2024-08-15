@@ -39,7 +39,7 @@ export class AuthService {
 
     return {
       data,
-      medaData: { access_token },
+      metaData: { access_token },
     };
   }
 
@@ -63,6 +63,6 @@ export class AuthService {
       email: dbUser.email,
       role: dbUser.role,
     };
-    return { data, medaData: { access_token } };
+    return { data, metaData: { access_token } };
   }
 }

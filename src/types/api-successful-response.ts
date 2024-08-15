@@ -3,7 +3,7 @@ export interface ApiSuccessFullResponse<T> {
 }
 export interface ApiSuccessFullResponseWithMetaData<T, V> {
   data: T;
-  medaData: V;
+  metaData: V;
 }
 
 export type Token = { access_token: string };

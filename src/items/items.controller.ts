@@ -35,6 +35,12 @@ export class ItemsController {
     return this.itemsService.getAllItems();
   }
 
+  @Public()
+  @Get('collection/:id')
+  getAllCollectionItems(@Param('id') id: string) {
+    return this.itemsService.getAllCollectionItems(id);
+  }
+
   @Post()
   createItem(@Body() item: CreateItemDto, @GetUser() user: UserDecoded) {
     return this.itemsService.createItem(item, user);

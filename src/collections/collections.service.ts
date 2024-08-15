@@ -13,25 +13,33 @@ import {
 export class CollectionsService {
   constructor(private prisma: PrismaService) {}
   @errorHandler()
-  async getCollectionById(id: string) {
-    return await this.prisma.collection.findFirstOrThrow({
+  async getCollectionById(
+    id: string,
+  ): Promise<ApiSuccessFullResponse<Collection>> {
+    const data = await this.prisma.collection.findFirstOrThrow({
       where: { id: id },
+      include: { items: true, category: { select: { name: true, id: true } } },
     });
+    return { data };
   }
 
   @errorHandler()
   async getCollectionItemsById(collectionId: string) {
     return await this.prisma.collection.findFirstOrThrow({
       where: { id: collectionId },
-      include: { items: true },
+      include: { items: true, user: true },
     });
   }
 
   @errorHandler()
-  async getUserCollections(user: UserDecoded) {
-    return await this.prisma.collection.findMany({
+  async getUserCollections(
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<Collection[]>> {
+    const data = await this.prisma.collection.findMany({
       where: { userId: user.id },
+      include: { items: true },
     });
+    return { data };
   }
 
   @errorHandler()

@@ -14,6 +14,12 @@ export class TagsController {
   }
 
   @Public()
+  @Get(':id/items')
+  getItemsByTagId(@Param('id') id: string) {
+    return this.tagsService.getItemsByTagId(id);
+  }
+
+  @Public()
   @Get()
   getAll() {
     return this.tagsService.getAll();

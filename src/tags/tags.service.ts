@@ -22,6 +22,22 @@ export class TagsService {
   }
 
   @errorHandler()
+  async getItemsByTagId(id: string): Promise<ApiSuccessFullResponse<Tags>> {
+    const data = await this.prisma.tags.findFirstOrThrow({
+      where: { id },
+      include: {
+        items: {
+          include: {
+            author: { select: { firstName: true } },
+            collection: { select: { name: true } },
+          },
+        },
+      },
+    });
+    return { data };
+  }
+
+  @errorHandler()
   async create(tag: CreateTagDto) {
     await this.prisma.tags.create({ data: tag });
   }

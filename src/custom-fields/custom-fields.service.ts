@@ -52,7 +52,6 @@ export class CustomFieldsService {
         where: { id: field.customFieldId },
         data: {
           name: field.name,
-          value: field.value,
           type: field.type,
         },
       }),

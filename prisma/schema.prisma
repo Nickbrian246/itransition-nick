@@ -29,6 +29,7 @@ enum TypeCustomField {
   STRING
   INT
   BOOLEAN
+  DATE
 }
 
 
@@ -62,7 +63,7 @@ model UserPreferences {
   updatedAt     DateTime    @updatedAt
 }
 
-
+//TODO CHANGE RELATIONS TO MANY TO MANY
 model Collection {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   user          User     @relation(fields: [userId], references: [id])
@@ -102,7 +103,6 @@ model CustomFields {
 
   
   name          String
-  value         String?
   type          TypeCustomField 
 
   createdAt   DateTime            @default(now())

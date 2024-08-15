@@ -22,6 +22,7 @@ export class ItemsService {
   async getItemById(id: string): Promise<ApiSuccessFullResponse<Item>> {
     const item = await this.prismaService.item.findFirstOrThrow({
       where: { id },
+      include: { tag: true, comments: true },
     });
     const data =
       item.customFields && typeof item.customFields === 'string'
@@ -36,6 +37,26 @@ export class ItemsService {
       include: {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+    // const data =
+    //   item.customFields && typeof item.customFields === 'string'
+    //     ? { ...item, customFields: JSON.parse(item.customFields) }
+    //     : item;
+    return { data: item };
+  }
+
+  @errorHandler()
+  async getAllCollectionItems(
+    id: string,
+  ): Promise<ApiSuccessFullResponse<Item[]>> {
+    const item = await this.prismaService.item.findMany({
+      where: { collectionId: id },
+      include: {
+        collection: { select: { name: true } },
+        author: { select: { firstName: true } },
+        tag: { select: { name: true } },
       },
       orderBy: { createdAt: 'asc' },
     });
