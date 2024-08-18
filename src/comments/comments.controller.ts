@@ -28,8 +28,11 @@ export class CommentsController {
   }
 
   @Post()
-  createComment(@Body() comment: CreateCommentDto) {
-    return this.commentsService.createComment(comment);
+  createComment(
+    @Body() comment: CreateCommentDto,
+    @GetUser() user: UserDecoded,
+  ) {
+    return this.commentsService.createComment(comment, user);
   }
 
   @Put(':id')

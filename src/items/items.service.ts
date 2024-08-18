@@ -56,7 +56,7 @@ export class ItemsService {
       include: {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
-        tag: { select: { name: true } },
+        tag: { select: { name: true, id: true } },
       },
       orderBy: { createdAt: 'asc' },
     });
@@ -78,6 +78,7 @@ export class ItemsService {
         collectionId: item.collectionId,
         tagIds: item.tagsIds,
         authorId: user.id,
+        customFields: JSON.stringify(item.customFields) ?? null,
       },
     });
     return { data };

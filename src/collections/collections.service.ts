@@ -18,7 +18,11 @@ export class CollectionsService {
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.findFirstOrThrow({
       where: { id: id },
-      include: { items: true, category: { select: { name: true, id: true } } },
+      include: {
+        items: true,
+        category: { select: { name: true, id: true } },
+        user: { select: { email: true } },
+      },
     });
     return { data };
   }

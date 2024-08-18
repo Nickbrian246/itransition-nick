@@ -30,7 +30,6 @@ export class CustomFieldsService {
     const fields = customFields.customFields.map((field) => ({
       collectionId: field.collectionId,
       name: field.name,
-      value: field.value,
       type: field.type,
     }));
 
