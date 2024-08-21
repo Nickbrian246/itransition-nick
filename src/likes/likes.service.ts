@@ -20,34 +20,17 @@ export class LikesService {
   }
 
   @errorHandler()
-  async getLikeByUserIdAndItemId(
-    like: LikeDto,
-    user: UserDecoded,
-  ): Promise<ApiSuccessFullResponse<Likes>> {
-    const data = await this.prismaService.likes.findFirstOrThrow({
-      where: {
-        userId: user.id,
-        itemId: like.itemId,
-      },
-    });
-    return { data };
-  }
-
-  @errorHandler()
-  async createLike(
-    like: LikeDto,
+  async getLikesByItemId(
+    id: string,
     user: UserDecoded,
   ): Promise<ApiSuccessFullResponse<likesData>> {
-    await this.prismaService.likes.create({
-      data: { itemId: like.itemId, userId: user.id },
-    });
     const counter = await this.prismaService.likes.findMany({
-      where: { itemId: like.itemId },
+      where: { itemId: id },
     });
 
     const didUserLikeIt = await this.prismaService.likes.findFirst({
       where: {
-        itemId: like.itemId,
+        itemId: id,
         AND: [{ userId: user.id }],
       },
     });
@@ -57,11 +40,36 @@ export class LikesService {
   }
 
   @errorHandler()
-  async deleteLike(like: LikeDto, user: UserDecoded) {
-    const likeFound = await this.prismaService.likes.findFirstOrThrow({
-      where: { itemId: like.itemId, userId: user.id },
+  async createLike(
+    itemId: string,
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<likesData>> {
+    await this.prismaService.likes.create({
+      data: { itemId: itemId, userId: user.id },
+    });
+    const counter = await this.prismaService.likes.findMany({
+      where: { itemId: itemId },
     });
 
+    const didUserLikeIt = await this.prismaService.likes.findFirst({
+      where: {
+        itemId: itemId,
+        AND: [{ userId: user.id }],
+      },
+    });
+    return {
+      data: { counter: counter.length, didUserLikeIt: !!didUserLikeIt },
+    };
+  }
+
+  @errorHandler()
+  async deleteLike(
+    itemId: string,
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<likesData>> {
+    const likeFound = await this.prismaService.likes.findFirstOrThrow({
+      where: { itemId: itemId, userId: user.id },
+    });
     await this.prismaService.likes.delete({
       where: {
         id: likeFound.id,
@@ -69,5 +77,18 @@ export class LikesService {
         itemId: likeFound.itemId,
       },
     });
+    const counter = await this.prismaService.likes.findMany({
+      where: { itemId: itemId },
+    });
+
+    const didUserLikeIt = await this.prismaService.likes.findFirst({
+      where: {
+        itemId: itemId,
+        AND: [{ userId: user.id }],
+      },
+    });
+    return {
+      data: { counter: counter.length, didUserLikeIt: !!didUserLikeIt },
+    };
   }
 }

@@ -6,6 +6,7 @@ import { TextSearchService } from './text-search.service';
 @Controller('text-search')
 export class TextSearchController {
   constructor(private textService: TextSearchService) {}
+
   @Public()
   @Get()
   getMatchedITems(@Query('text') text: string) {

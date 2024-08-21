@@ -66,6 +66,6 @@ export class CollectionsController {
 
   @Delete(':id')
   deleteCollectionById(@Param('id') id: string) {
-    return this.collectionsService.getCollectionById(id);
+    return this.collectionsService.deleteCollectionById(id);
   }
 }
