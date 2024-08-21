@@ -11,7 +11,6 @@ export class CreateItemDto {
   collectionId: string;
 
   @IsArray()
-  @IsString()
   tagsIds: string[];
 
   @IsOptional()

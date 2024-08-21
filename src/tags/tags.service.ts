@@ -38,8 +38,9 @@ export class TagsService {
   }
 
   @errorHandler()
-  async create(tag: CreateTagDto) {
-    await this.prisma.tags.create({ data: tag });
+  async create(tag: CreateTagDto): Promise<ApiSuccessFullResponse<Tags>> {
+    const data = await this.prisma.tags.create({ data: tag });
+    return { data };
   }
 
   @errorHandler()

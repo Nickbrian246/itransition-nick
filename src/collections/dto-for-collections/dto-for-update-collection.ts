@@ -6,6 +6,9 @@ export class UpdateCollectionDto {
   @IsString()
   description: string;
 
+  @IsString()
+  category: string;
+
   @IsOptional()
   @IsString()
   imageId: string;

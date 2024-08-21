@@ -18,7 +18,11 @@ export class CollectionsService {
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.findFirstOrThrow({
       where: { id: id },
-      include: { items: true, category: { select: { name: true, id: true } } },
+      include: {
+        items: true,
+        category: { select: { name: true, id: true } },
+        user: { select: { email: true } },
+      },
     });
     return { data };
   }
@@ -47,6 +51,7 @@ export class CollectionsService {
     const data = await this.prisma.collection.findMany({
       include: { items: true },
       orderBy: { updatedAt: 'desc' },
+      take: 5,
     });
     return { data };
   }
@@ -81,20 +86,35 @@ export class CollectionsService {
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.update({
       where: { id: collectionId },
-      data: { ...collection },
+      data: {
+        name: collection.name,
+        categoryId: collection.category,
+        description: collection.description,
+        imageId: collection.imageId ?? null,
+      },
     });
 
     return { data };
   }
 
   @errorHandler()
-  async deleteCollectionById(
-    collectionId: string,
-  ): Promise<ApiSuccessFullResponse<Collection>> {
-    const data = await this.prisma.collection.delete({
+  async deleteCollectionById(collectionId: string) {
+    const itemsIds = await this.prisma.item.findMany({
+      where: { collectionId },
+    });
+    if (itemsIds.length > 0) {
+      for (let item of itemsIds) {
+        await this.prisma.likes.deleteMany({ where: { itemId: item.id } });
+      }
+      for (let item of itemsIds) {
+        await this.prisma.comments.deleteMany({ where: { itemId: item.id } });
+      }
+
+      await this.prisma.item.deleteMany({ where: { collectionId } });
+    }
+
+    await this.prisma.collection.delete({
       where: { id: collectionId },
     });
-
-    return { data };
   }
 }

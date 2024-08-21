@@ -9,26 +9,29 @@ import {
 } from '@nestjs/common';
 import { LikeDto } from './dto-for-likes';
 import { LikesService } from './likes.service';
+import { GetUser } from 'src/decorators/get-user';
+import { UserDecoded } from 'src/types/user';
 
 @Controller('likes')
 export class LikesController {
   constructor(private likeService: LikesService) {}
-  @Get()
-  getLike(@Query() like: LikeDto) {
-    return this.likeService.getLikeByUserIdAndItemId(like);
+
+  @Get(':id')
+  getLike(@Param('id') id: string, @GetUser() user: UserDecoded) {
+    return this.likeService.getLikesByItemId(id, user);
   }
   // @Get()
   // getAllLikes() {
   //   return this.likeService.getAllLikes();
   // }
 
-  @Post()
-  createLike(@Body() like: LikeDto) {
-    return this.likeService.createLike(like);
+  @Post(':id')
+  createLike(@Param('id') itemId: string, @GetUser() user: UserDecoded) {
+    return this.likeService.createLike(itemId, user);
   }
 
-  @Delete()
-  deleteLike(@Body() like: LikeDto) {
-    return this.likeService.deleteLike(like);
+  @Delete(':id')
+  deleteLike(@Param('id') itemId: string, @GetUser() user: UserDecoded) {
+    return this.likeService.deleteLike(itemId, user);
   }
 }

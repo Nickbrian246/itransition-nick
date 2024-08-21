@@ -8,7 +8,15 @@ export class CustomFieldDto {
   name: string;
 
   @IsString()
-  value: string;
+  @IsEnum(TypeCustomField)
+  type: TypeCustomField;
+}
+export class CustomFieldItemDto {
+  @IsString()
+  id: string;
+
+  @IsString()
+  name: string;
 
   @IsString()
   @IsEnum(TypeCustomField)

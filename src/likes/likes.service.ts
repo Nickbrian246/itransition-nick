@@ -2,8 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { LikeDto } from './dto-for-likes';
 import { errorHandler } from 'src/decorators/error-handler';
-import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
+import {
+  ApiSuccessFullResponse,
+  likesData,
+} from 'src/types/api-successful-response';
 import { Likes } from '@prisma/client';
+import { UserDecoded } from 'src/types/user';
 
 @Injectable()
 export class LikesService {
@@ -16,31 +20,56 @@ export class LikesService {
   }
 
   @errorHandler()
-  async getLikeByUserIdAndItemId(
-    like: LikeDto,
-  ): Promise<ApiSuccessFullResponse<Likes>> {
-    const data = await this.prismaService.likes.findFirstOrThrow({
+  async getLikesByItemId(
+    id: string,
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<likesData>> {
+    const counter = await this.prismaService.likes.findMany({
+      where: { itemId: id },
+    });
+
+    const didUserLikeIt = await this.prismaService.likes.findFirst({
       where: {
-        userId: like.userId,
-        itemId: like.itemId,
+        itemId: id,
+        AND: [{ userId: user.id }],
       },
     });
-    return { data };
+    return {
+      data: { counter: counter.length, didUserLikeIt: !!didUserLikeIt },
+    };
   }
 
   @errorHandler()
-  async createLike(like: LikeDto) {
+  async createLike(
+    itemId: string,
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<likesData>> {
     await this.prismaService.likes.create({
-      data: { itemId: like.itemId, userId: like.userId },
+      data: { itemId: itemId, userId: user.id },
     });
+    const counter = await this.prismaService.likes.findMany({
+      where: { itemId: itemId },
+    });
+
+    const didUserLikeIt = await this.prismaService.likes.findFirst({
+      where: {
+        itemId: itemId,
+        AND: [{ userId: user.id }],
+      },
+    });
+    return {
+      data: { counter: counter.length, didUserLikeIt: !!didUserLikeIt },
+    };
   }
 
   @errorHandler()
-  async deleteLike(like: LikeDto) {
+  async deleteLike(
+    itemId: string,
+    user: UserDecoded,
+  ): Promise<ApiSuccessFullResponse<likesData>> {
     const likeFound = await this.prismaService.likes.findFirstOrThrow({
-      where: { itemId: like.itemId, userId: like.userId },
+      where: { itemId: itemId, userId: user.id },
     });
-
     await this.prismaService.likes.delete({
       where: {
         id: likeFound.id,
@@ -48,5 +77,18 @@ export class LikesService {
         itemId: likeFound.itemId,
       },
     });
+    const counter = await this.prismaService.likes.findMany({
+      where: { itemId: itemId },
+    });
+
+    const didUserLikeIt = await this.prismaService.likes.findFirst({
+      where: {
+        itemId: itemId,
+        AND: [{ userId: user.id }],
+      },
+    });
+    return {
+      data: { counter: counter.length, didUserLikeIt: !!didUserLikeIt },
+    };
   }
 }

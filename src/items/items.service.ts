@@ -22,7 +22,10 @@ export class ItemsService {
   async getItemById(id: string): Promise<ApiSuccessFullResponse<Item>> {
     const item = await this.prismaService.item.findFirstOrThrow({
       where: { id },
-      include: { tag: true, comments: true },
+      include: {
+        tag: true,
+        author: { select: { firstName: true, email: true } },
+      },
     });
     const data =
       item.customFields && typeof item.customFields === 'string'
@@ -38,7 +41,8 @@ export class ItemsService {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
     });
     // const data =
     //   item.customFields && typeof item.customFields === 'string'
@@ -56,7 +60,7 @@ export class ItemsService {
       include: {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
-        tag: { select: { name: true } },
+        tag: { select: { name: true, id: true } },
       },
       orderBy: { createdAt: 'asc' },
     });
@@ -67,6 +71,7 @@ export class ItemsService {
     return { data: item };
   }
 
+  //TODO solution for many to many problems
   @errorHandler()
   async createItem(
     item: CreateItemDto,
@@ -78,6 +83,7 @@ export class ItemsService {
         collectionId: item.collectionId,
         tagIds: item.tagsIds,
         authorId: user.id,
+        customFields: JSON.stringify(item.customFields) ?? null,
       },
     });
     return { data };
@@ -88,24 +94,28 @@ export class ItemsService {
     id: string,
     item: UpdateItemDto,
   ): Promise<ApiSuccessFullResponse<Item>> {
-    const itemData = {
-      ...item,
-      customFields: item.customFields
-        ? JSON.stringify(item.customFields)
-        : null,
-    };
     const data = await this.prismaService.item.update({
       where: { id },
-      data: { ...itemData },
+      data: {
+        name: item.name,
+        tagIds: item.tagsIds,
+        customFields: JSON.stringify(item.customFields) ?? null,
+      },
     });
     return { data };
   }
 
   @errorHandler()
-  async deleteItemById(id: string): Promise<ApiSuccessFullResponse<Item>> {
-    const data = await this.prismaService.item.delete({
+  async deleteItemById(id: string) {
+    await this.prismaService.likes.deleteMany({
+      where: { itemId: id },
+    });
+    await this.prismaService.comments.deleteMany({
+      where: { itemId: id },
+    });
+
+    await this.prismaService.item.delete({
       where: { id },
     });
-    return { data };
   }
 }

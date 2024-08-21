@@ -7,3 +7,8 @@ export interface ApiSuccessFullResponseWithMetaData<T, V> {
 }
 
 export type Token = { access_token: string };
+
+export type likesData = {
+  didUserLikeIt: boolean;
+  counter: number;
+};

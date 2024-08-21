@@ -17,6 +17,7 @@ import { ItemsModule } from './items/items.module';
 import { LikesModule } from './likes/likes.module';
 import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
+import { TextSearchModule } from './text-search/text-search.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { UsersModule } from './users/users.module';
     CommentsModule,
     LikesModule,
     UsersModule,
+    TextSearchModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [

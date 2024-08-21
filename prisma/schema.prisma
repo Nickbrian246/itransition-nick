@@ -27,7 +27,7 @@ enum Theme {
 }
 enum TypeCustomField {
   STRING
-  INT
+  INTEGER
   BOOLEAN
   DATE
 }
@@ -63,7 +63,7 @@ model UserPreferences {
   updatedAt     DateTime    @updatedAt
 }
 
-//TODO CHANGE RELATIONS TO MANY TO MANY
+
 model Collection {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   user          User     @relation(fields: [userId], references: [id])
@@ -126,16 +126,14 @@ model Tags  {
 }
 model Item {
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
-  name           String          
-  
   author         User            @relation(fields: [authorId], references: [id])
   authorId       String          @db.ObjectId
   collection     Collection      @relation(fields: [collectionId], references: [id])
   collectionId   String          @db.ObjectId
+  tag            Tags[]          @relation(fields: [tagIds], references: [id])
+  tagIds         String[]        @db.ObjectId
 
-  tag            Tags[]            @relation(fields: [tagIds], references: [id])
-  tagIds         String[]          @db.ObjectId
-
+  name           String          
   customFields   Json?
 
   likes         Likes[]

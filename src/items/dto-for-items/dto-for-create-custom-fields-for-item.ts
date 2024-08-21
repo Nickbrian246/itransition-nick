@@ -1,10 +1,12 @@
 import {
-  CreateCustomFieldsDto,
   CustomFieldDto,
+  CustomFieldItemDto,
 } from 'src/custom-fields/dto-for-custom-fields';
-import {} from 'class-validator';
-import { OmitType } from '@nestjs/mapped-types';
+import { IsString } from 'class-validator';
 
-export class CustomFieldsForItemDto extends OmitType(CustomFieldDto, [
-  'collectionId',
-]) {}
+export class CustomFieldsForItemDto extends CustomFieldItemDto {
+  @IsString()
+  id: string;
+  @IsString()
+  value: string;
+}
