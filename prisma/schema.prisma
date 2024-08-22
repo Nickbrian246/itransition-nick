@@ -18,8 +18,8 @@ enum UserRole {
   ADMIN
 }
 enum Language {
-  ES
-  EN
+  es
+  en
 }
 enum Theme {
   DARK

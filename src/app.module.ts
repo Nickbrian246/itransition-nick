@@ -19,6 +19,7 @@ import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
 import { TextSearchModule } from './text-search/text-search.module';
 import { StatusGuard } from './guards/guard-for-status/guard-for-status';
+import { UserPreferencesModule } from './user-preferences/user-preferences.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { StatusGuard } from './guards/guard-for-status/guard-for-status';
     LikesModule,
     UsersModule,
     TextSearchModule,
+    UserPreferencesModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [

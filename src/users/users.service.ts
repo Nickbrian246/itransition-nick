@@ -23,6 +23,7 @@ export class UsersService {
   > {
     const user = await this.prismaService.user.findFirstOrThrow({
       where: { id: id },
+      include: { userPreferences: true },
     });
     const data = {
       email: user.email,
