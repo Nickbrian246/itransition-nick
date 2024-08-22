@@ -37,10 +37,10 @@ export class CollectionsService {
 
   @errorHandler()
   async getUserCollections(
-    user: UserDecoded,
+    userId: string,
   ): Promise<ApiSuccessFullResponse<Collection[]>> {
     const data = await this.prisma.collection.findMany({
-      where: { userId: user.id },
+      where: { userId: userId },
       include: { items: true },
     });
     return { data };

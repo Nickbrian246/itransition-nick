@@ -18,6 +18,7 @@ import { LikesModule } from './likes/likes.module';
 import { TagsModule } from './tags/tags.module';
 import { UsersModule } from './users/users.module';
 import { TextSearchModule } from './text-search/text-search.module';
+import { StatusGuard } from './guards/guard-for-status/guard-for-status';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { TextSearchModule } from './text-search/text-search.module';
   controllers: [AppController, CustomFieldsController],
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: StatusGuard },
     AppService,
     PrismaService,
     CustomFieldsService,

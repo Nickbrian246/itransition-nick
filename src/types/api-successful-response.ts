@@ -12,3 +12,8 @@ export type likesData = {
   didUserLikeIt: boolean;
   counter: number;
 };
+
+export type UsersMetaDataCounters = {
+  collections: number;
+  items: number;
+};
