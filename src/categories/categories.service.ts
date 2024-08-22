@@ -12,7 +12,6 @@ export class CategoriesService {
   @errorHandler()
   async getAllCategories(): Promise<ApiSuccessFullResponse<Category[]>> {
     const data = await this.prismaService.category.findMany();
-    console.log(data);
 
     return { data };
   }

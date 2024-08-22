@@ -25,6 +25,7 @@ export class ItemsService {
       include: {
         tag: true,
         author: { select: { firstName: true, email: true } },
+        editedBy: { select: { firstName: true } },
       },
     });
     const data =
@@ -60,6 +61,7 @@ export class ItemsService {
       include: {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
+        editedBy: { select: { firstName: true } },
         tag: { select: { name: true, id: true } },
       },
       orderBy: { createdAt: 'asc' },

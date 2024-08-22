@@ -41,7 +41,13 @@ export class CollectionsService {
   ): Promise<ApiSuccessFullResponse<Collection[]>> {
     const data = await this.prisma.collection.findMany({
       where: { userId: userId },
-      include: { items: true },
+      include: {
+        items: true,
+        author: { select: { firstName: true } },
+        editedBy: { select: { firstName: true } },
+        customFields: true,
+      },
+      orderBy: { updatedAt: 'desc' },
     });
     return { data };
   }

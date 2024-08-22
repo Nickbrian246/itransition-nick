@@ -65,8 +65,6 @@ export class CustomFieldsService {
 
   @errorHandler()
   async deleteManyById(customFieldsId: CustomFieldIdDto[]) {
-    console.log(customFieldsId);
-
     const data = customFieldsId.map((fieldId) =>
       this.prismaService.customFields.delete({ where: { id: fieldId.id } }),
     );
