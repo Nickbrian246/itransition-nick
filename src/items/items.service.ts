@@ -41,6 +41,7 @@ export class ItemsService {
       include: {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
+        editedBy: { select: { firstName: true } },
       },
       orderBy: { createdAt: 'desc' },
       take: 10,
