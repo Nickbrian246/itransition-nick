@@ -81,6 +81,8 @@ export class ItemsService {
       data: {
         name: item.name,
         collectionId: item.collectionId,
+        userId: item.userId,
+        editedById: user.id,
         tagIds: item.tagsIds,
         authorId: user.id,
         customFields: JSON.stringify(item.customFields) ?? null,
@@ -93,11 +95,14 @@ export class ItemsService {
   async updateItemById(
     id: string,
     item: UpdateItemDto,
+    user: UserDecoded,
   ): Promise<ApiSuccessFullResponse<Item>> {
     const data = await this.prismaService.item.update({
       where: { id },
       data: {
         name: item.name,
+        isEdited: true,
+        editedById: user.id,
         tagIds: item.tagsIds,
         customFields: JSON.stringify(item.customFields) ?? null,
       },

@@ -16,7 +16,7 @@ import {
   UpdateCollectionDto,
 } from './dto-for-collections';
 import { Public } from 'src/decorators/public-route';
-import { InterceptorForDefineOwner } from './interceptor/interceptor-for-owner';
+import { InterceptorForDefineOwner } from 'src/interceptors/interceptor-for-user-status/interceptor-for-user-status';
 
 @Controller('collections')
 export class CollectionsController {
@@ -55,21 +55,22 @@ export class CollectionsController {
     return this.collectionsService.getUserCollections(id);
   }
 
-  // @UseInterceptors(InterceptorForDefineOwner)
+  @UseInterceptors(InterceptorForDefineOwner)
   @Post()
   createCollection(
     @Body() collection: CreateCollectionDto,
     @GetUser() user: UserDecoded,
   ) {
-    // return this.collectionsService.createMy(collection, user);
+    return this.collectionsService.createMy(collection, user);
   }
 
   @Put(':id')
   updateCollectionById(
     @Param('id') id: string,
     @Body() collection: UpdateCollectionDto,
+    @GetUser() user: UserDecoded,
   ) {
-    return this.collectionsService.updateCollectionById(collection, id);
+    return this.collectionsService.updateCollectionById(collection, id, user);
   }
 
   @Delete(':id')

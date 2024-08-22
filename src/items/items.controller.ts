@@ -13,6 +13,8 @@ import { UpdateItemDto } from './dto-for-items/dto-for-update-item';
 import { Public } from 'src/decorators/public-route';
 import { GetUser } from 'src/decorators/get-user';
 import { UserDecoded } from 'src/types/user';
+import { UseInterceptors } from '@nestjs/common';
+import { InterceptorForDefineOwner } from 'src/interceptors/interceptor-for-user-status/interceptor-for-user-status';
 
 @Controller('items')
 export class ItemsController {
@@ -40,15 +42,19 @@ export class ItemsController {
   getAllCollectionItems(@Param('id') id: string) {
     return this.itemsService.getAllCollectionItems(id);
   }
-
+  @UseInterceptors(InterceptorForDefineOwner)
   @Post()
   createItem(@Body() item: CreateItemDto, @GetUser() user: UserDecoded) {
     return this.itemsService.createItem(item, user);
   }
 
   @Put(':id')
-  updateItemById(@Param('id') id: string, @Body() item: UpdateItemDto) {
-    return this.itemsService.updateItemById(id, item);
+  updateItemById(
+    @Param('id') id: string,
+    @Body() item: UpdateItemDto,
+    @GetUser() user: UserDecoded,
+  ) {
+    return this.itemsService.updateItemById(id, item, user);
   }
 
   @Delete(':id')

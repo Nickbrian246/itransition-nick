@@ -71,8 +71,12 @@ export class CollectionsService {
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.create({
       data: {
-        user: { connect: { id: user.id } },
-        ...collection,
+        user: { connect: { id: collection.userId } },
+        editedBy: { connect: { id: user.id } },
+        author: { connect: { id: user.id } },
+        name: collection.name,
+        description: collection.description,
+        imageId: collection.imageId ?? null,
         category: { connect: { id: collection.category } },
       },
     });
@@ -83,11 +87,14 @@ export class CollectionsService {
   async updateCollectionById(
     collection: UpdateCollectionDto,
     collectionId: string,
+    user: UserDecoded,
   ): Promise<ApiSuccessFullResponse<Collection>> {
     const data = await this.prisma.collection.update({
       where: { id: collectionId },
       data: {
         name: collection.name,
+        editedById: user.id,
+        isEdited: true,
         categoryId: collection.category,
         description: collection.description,
         imageId: collection.imageId ?? null,

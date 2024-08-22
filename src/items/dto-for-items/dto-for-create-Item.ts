@@ -8,6 +8,9 @@ export class CreateItemDto {
   name: string;
 
   @IsString()
+  userId: string;
+
+  @IsString()
   collectionId: string;
 
   @IsArray()
