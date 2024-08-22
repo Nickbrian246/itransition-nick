@@ -18,8 +18,8 @@ enum UserRole {
   ADMIN
 }
 enum Language {
-  ES
-  EN
+  es
+  en
 }
 enum Theme {
   DARK
@@ -31,23 +31,31 @@ enum TypeCustomField {
   BOOLEAN
   DATE
 }
-
+enum Status {
+  ACTIVE
+  BLOCKED
+}
 
 model User {
-  id              String           @id @default(auto()) @map("_id") @db.ObjectId
-  firstName       String
-  lastName        String
-  email           String           @unique()
-  password        String
-  role            UserRole         @default(USER)
-  collections     Collection[]       
-  userPreferences UserPreferences? 
-  likes           Likes[]
-  comments        Comments[]
-  items           Item[]
+  id                  String             @id @default(auto()) @map("_id") @db.ObjectId
+  firstName           String
+  lastName            String
+  email               String             @unique()
+  password            String
+  status              Status             @default(ACTIVE)
+  role                UserRole           @default(USER)
+  collections         Collection[] 
+  author              Collection[]       @relation("AuthorOfCollections")     
+  collectionsEdited   Collection[]       @relation("CollectionEdited")     
+  userPreferences     UserPreferences? 
+  likes               Likes[]
+  comments            Comments[]
+  items               Item[]
+  itemsOwner          Item[]             @relation("ItemOwner")     
+  itemsEdited         Item[]             @relation("ItemEditedBy")     
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 
 }
 
@@ -65,9 +73,18 @@ model UserPreferences {
 
 
 model Collection {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  user          User     @relation(fields: [userId], references: [id])
-  userId        String   @db.ObjectId
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+
+  user          User      @relation(fields: [userId], references: [id])
+  userId        String    @db.ObjectId
+
+  author        User?      @relation("AuthorOfCollections",fields: [authorId], references: [id])
+  authorId       String?    @db.ObjectId
+
+  editedBy       User     @relation("CollectionEdited",fields: [editedById], references: [id])
+  editedById     String   @db.ObjectId
+
+  isEdited      Boolean   @default(false)
 
   category      Category  @relation(fields: [categoryId], references: [id])
   categoryId    String    @db.ObjectId 
@@ -126,6 +143,15 @@ model Tags  {
 }
 model Item {
   id             String          @id @default(auto()) @map("_id") @db.ObjectId
+
+  user           User             @relation("ItemOwner",fields: [userId], references: [id])
+  userId         String           @db.ObjectId
+  
+  editedBy       User?            @relation("ItemEditedBy",fields: [editedById], references: [id])
+  editedById     String?          @db.ObjectId
+
+  isEdited       Boolean          @default(false)
+
   author         User            @relation(fields: [authorId], references: [id])
   authorId       String          @db.ObjectId
   collection     Collection      @relation(fields: [collectionId], references: [id])
@@ -136,11 +162,11 @@ model Item {
   name           String          
   customFields   Json?
 
-  likes         Likes[]
-  comments      Comments[]
+  likes          Likes[]
+  comments       Comments[]
   
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 

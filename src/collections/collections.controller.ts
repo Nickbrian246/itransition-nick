@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CollectionsService } from './collections.service';
 import { GetUser } from 'src/decorators/get-user';
@@ -15,6 +16,7 @@ import {
   UpdateCollectionDto,
 } from './dto-for-collections';
 import { Public } from 'src/decorators/public-route';
+import { InterceptorForDefineOwner } from 'src/interceptors/interceptor-for-user-status/interceptor-for-user-status';
 
 @Controller('collections')
 export class CollectionsController {
@@ -45,9 +47,15 @@ export class CollectionsController {
 
   @Get('')
   GetUserCollections(@GetUser() user: UserDecoded) {
-    return this.collectionsService.getUserCollections(user);
+    return this.collectionsService.getUserCollections(user.id);
   }
 
+  @Get('user/:id')
+  getCollectionsByUserId(@Param('id') id: string) {
+    return this.collectionsService.getUserCollections(id);
+  }
+
+  @UseInterceptors(InterceptorForDefineOwner)
   @Post()
   createCollection(
     @Body() collection: CreateCollectionDto,
@@ -60,8 +68,9 @@ export class CollectionsController {
   updateCollectionById(
     @Param('id') id: string,
     @Body() collection: UpdateCollectionDto,
+    @GetUser() user: UserDecoded,
   ) {
-    return this.collectionsService.updateCollectionById(collection, id);
+    return this.collectionsService.updateCollectionById(collection, id, user);
   }
 
   @Delete(':id')

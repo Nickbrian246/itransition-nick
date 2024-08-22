@@ -7,6 +7,9 @@ export class CreateCollectionDto {
   description: string;
 
   @IsString()
+  userId: string;
+
+  @IsString()
   category: string;
 
   @IsOptional()
