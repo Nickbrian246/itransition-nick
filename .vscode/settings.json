@@ -4,6 +4,7 @@
     "itransition",
     "nestjs",
     "Notfound",
-    "signin"
+    "signin",
+    "websockets"
   ]
 }
