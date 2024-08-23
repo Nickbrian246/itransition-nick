@@ -20,6 +20,7 @@ import { UsersModule } from './users/users.module';
 import { TextSearchModule } from './text-search/text-search.module';
 import { StatusGuard } from './guards/guard-for-status/guard-for-status';
 import { UserPreferencesModule } from './user-preferences/user-preferences.module';
+import { CommentsWebSocketModule } from './comments-web-socket/comments-web-socket.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { UserPreferencesModule } from './user-preferences/user-preferences.modul
     UsersModule,
     TextSearchModule,
     UserPreferencesModule,
+    CommentsWebSocketModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [

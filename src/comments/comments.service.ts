@@ -5,10 +5,14 @@ import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { Comments } from '@prisma/client';
 import { CreateCommentDto, UpdateCommentDto } from './dto-for-comments';
 import { UserDecoded } from 'src/types/user';
+import { CommentsWebSocketGateway } from 'src/comments-web-socket/comments-web-socket.gateway';
 
 @Injectable()
 export class CommentsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private commentsGateway: CommentsWebSocketGateway,
+  ) {}
 
   @errorHandler()
   async getCommentById(id: string): Promise<ApiSuccessFullResponse<Comments>> {
@@ -43,6 +47,8 @@ export class CommentsService {
         userId: user.id,
       },
     });
+
+    this.commentsGateway.updateComments(comment.itemId);
     return { data };
   }
 
