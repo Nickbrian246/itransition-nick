@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { $Enums, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { errorHandler } from 'src/decorators/error-handler';
@@ -10,8 +10,30 @@ export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
   @errorHandler()
-  async getAllUsers(): Promise<ApiSuccessFullResponse<User[]>> {
-    const data = await this.prismaService.user.findMany();
+  async getAllUsers(): Promise<
+    ApiSuccessFullResponse<
+      {
+        firstName: string;
+        lastName: string;
+        email: string;
+        status: $Enums.Status;
+        role: $Enums.UserRole;
+        createdAt: Date;
+        id: string;
+      }[]
+    >
+  > {
+    const data = await this.prismaService.user.findMany({
+      select: {
+        firstName: true,
+        lastName: true,
+        email: true,
+        status: true,
+        role: true,
+        createdAt: true,
+        id: true,
+      },
+    });
     return { data };
   }
 

@@ -45,6 +45,7 @@ export class CollectionsService {
         items: true,
         author: { select: { firstName: true } },
         editedBy: { select: { firstName: true } },
+        user: { select: { firstName: true } },
         customFields: true,
       },
       orderBy: { updatedAt: 'desc' },
