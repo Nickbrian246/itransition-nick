@@ -27,6 +27,7 @@ export class CustomFieldsService {
 
   @errorHandler()
   async createManyCustomFields(customFields: CreateCustomFieldsDto) {
+    if (customFields.customFields.length === 0) return;
     const fields = customFields.customFields.map((field) => ({
       collectionId: field.collectionId,
       name: field.name,
