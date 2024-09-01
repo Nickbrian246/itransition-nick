@@ -9,7 +9,7 @@ export class TagsController {
 
   @Public()
   @Get(':id')
-  get(@Param() id: string) {
+  get(@Param('id') id: string) {
     return this.tagsService.get(id);
   }
 

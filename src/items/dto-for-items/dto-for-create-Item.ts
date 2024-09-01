@@ -13,9 +13,6 @@ export class CreateItemDto {
   @IsString()
   collectionId: string;
 
-  @IsArray()
-  tagsIds: string[];
-
   @IsOptional()
   @IsArray()
   @Type(() => CustomFieldsForItemDto)
