@@ -23,7 +23,7 @@ export class ItemsService {
     const item = await this.prismaService.item.findFirstOrThrow({
       where: { id },
       include: {
-        tag: true,
+        tags: { include: { tag: { select: { name: true, id: true } } } },
         author: { select: { firstName: true, email: true } },
         editedBy: { select: { firstName: true } },
       },
@@ -63,7 +63,7 @@ export class ItemsService {
         collection: { select: { name: true } },
         author: { select: { firstName: true } },
         editedBy: { select: { firstName: true } },
-        tag: { select: { name: true, id: true } },
+        tags: { select: { id: true, tag: { select: { name: true } } } },
       },
       orderBy: { createdAt: 'asc' },
     });
@@ -86,7 +86,6 @@ export class ItemsService {
         collectionId: item.collectionId,
         userId: item.userId,
         editedById: user.id,
-        tagIds: item.tagsIds,
         authorId: user.id,
         customFields: JSON.stringify(item.customFields) ?? null,
       },
@@ -106,7 +105,6 @@ export class ItemsService {
         name: item.name,
         isEdited: true,
         editedById: user.id,
-        tagIds: item.tagsIds,
         customFields: JSON.stringify(item.customFields) ?? null,
       },
     });

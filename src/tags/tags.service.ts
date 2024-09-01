@@ -28,8 +28,14 @@ export class TagsService {
       include: {
         items: {
           include: {
-            author: { select: { firstName: true } },
-            collection: { select: { name: true } },
+            item: {
+              select: {
+                author: {
+                  select: { firstName: true },
+                },
+                collection: { select: { name: true } },
+              },
+            },
           },
         },
       },
