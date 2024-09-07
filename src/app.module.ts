@@ -22,6 +22,8 @@ import { StatusGuard } from './guards/guard-for-status/guard-for-status';
 import { UserPreferencesModule } from './user-preferences/user-preferences.module';
 import { CommentsWebSocketModule } from './comments-web-socket/comments-web-socket.module';
 import { ItemsTagsModule } from './items-tags/items-tags.module';
+import { PassportModule } from '@nestjs/passport';
+import { AtlassianJiraModule } from './atlassian-jira/atlassian-jira.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { ItemsTagsModule } from './items-tags/items-tags.module';
     UserPreferencesModule,
     CommentsWebSocketModule,
     ItemsTagsModule,
+    PassportModule.register({ session: true }),
+    AtlassianJiraModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [
