@@ -39,6 +39,7 @@ enum Status {
 enum CredentialsOrigin {
   ATLASSIAN
   OWN
+  GOOGLE
 }
 
 model User {
