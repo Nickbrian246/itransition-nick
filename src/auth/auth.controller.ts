@@ -19,6 +19,7 @@ import {
 } from 'src/types/api-successful-response';
 import { UserWithOutPassword } from 'src/types/user';
 import { GoogleAuthGuard } from './guards/guard-for-google';
+import { GithubAuthGuard } from './guards/guard-for-github';
 
 @Controller('auth')
 export class AuthController {
@@ -39,9 +40,7 @@ export class AuthController {
   @Public()
   @Get(`atlassian-signin`)
   @UseGuards(AtlassianGuard)
-  handleAtlassianSignin() {
-    // return this.authService.signin(signinUser);
-  }
+  handleAtlassianSignin() {}
 
   @Public()
   @Get(`atlassian-jira/redirect`)
@@ -54,12 +53,9 @@ export class AuthController {
       AccessTokenAndProviderToken
     >,
   ) {
-    console.log(user.metaData);
-    //TODO remover todos los consol.log
     return {
       url: `${process.env.REDIRECT_BASE_URL}/auth/login?access_token=${user.metaData.access_token}&providerAccessToken=${user.metaData.providerAccessToken}`,
     };
-    // return this.authService.signin(signinUser);
   }
 
   @Public()
@@ -78,10 +74,29 @@ export class AuthController {
       AccessTokenAndProviderToken
     >,
   ) {
-    //TODO remover todos los consol.log
     return {
       url: `${process.env.REDIRECT_BASE_URL}/auth/login?access_token=${user.metaData.access_token}`,
     };
-    // return this.authService.signin(signinUser);
+  }
+
+  @Public()
+  @Get(`github-signin`)
+  @UseGuards(GithubAuthGuard)
+  handleGithubSignin() {}
+
+  @Public()
+  @Get(`github/redirect`)
+  @UseGuards(GithubAuthGuard)
+  @Redirect()
+  handleGithubRedirect(
+    @GetUser()
+    user: ApiSuccessFullResponseWithMetaData<
+      UserWithOutPassword,
+      AccessTokenAndProviderToken
+    >,
+  ) {
+    return {
+      url: `${process.env.REDIRECT_BASE_URL}/auth/login?access_token=${user.metaData.access_token}`,
+    };
   }
 }

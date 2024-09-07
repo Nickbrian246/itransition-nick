@@ -18,7 +18,6 @@ export class AtlassianGuard extends AuthGuard('atlassian') {
     // }
 
     const activate = (await super.canActivate(context)) as boolean;
-    console.log(activate);
 
     const req = context.switchToHttp().getRequest();
     await super.logIn(req);

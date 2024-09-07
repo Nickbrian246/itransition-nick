@@ -7,6 +7,7 @@ import { JwtStrategy } from './strategy';
 import { AtlassianStrategy } from './strategy/atlassian-jira';
 import { SessionSerializer } from './utils/serialize.auth';
 import { GoogleAuthStrategy } from './strategy/google-strategy';
+import { GithubAuthStrategy } from './strategy/github-strategy';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { GoogleAuthStrategy } from './strategy/google-strategy';
     AtlassianStrategy,
     GoogleAuthStrategy,
     SessionSerializer,
+    GithubAuthStrategy,
   ],
   controllers: [AuthController],
 })
