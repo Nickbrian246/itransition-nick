@@ -18,6 +18,7 @@ import {
   Token,
 } from 'src/types/api-successful-response';
 import { UserWithOutPassword } from 'src/types/user';
+import { GoogleAuthGuard } from './guards/guard-for-google';
 
 @Controller('auth')
 export class AuthController {
@@ -57,6 +58,29 @@ export class AuthController {
     //TODO remover todos los consol.log
     return {
       url: `${process.env.REDIRECT_BASE_URL}/auth/login?access_token=${user.metaData.access_token}&providerAccessToken=${user.metaData.providerAccessToken}`,
+    };
+    // return this.authService.signin(signinUser);
+  }
+
+  @Public()
+  @Get(`google-signin`)
+  @UseGuards(GoogleAuthGuard)
+  handleGoogleSignin() {}
+
+  @Public()
+  @Get(`google/redirect`)
+  @UseGuards(GoogleAuthGuard)
+  @Redirect()
+  handleGoogleRedirect(
+    @GetUser()
+    user: ApiSuccessFullResponseWithMetaData<
+      UserWithOutPassword,
+      AccessTokenAndProviderToken
+    >,
+  ) {
+    //TODO remover todos los consol.log
+    return {
+      url: `${process.env.REDIRECT_BASE_URL}/auth/login?access_token=${user.metaData.access_token}`,
     };
     // return this.authService.signin(signinUser);
   }

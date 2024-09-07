@@ -5,8 +5,8 @@ import { PrismaService } from 'src/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy';
 import { AtlassianStrategy } from './strategy/atlassian-jira';
-import { PassportModule } from '@nestjs/passport';
 import { SessionSerializer } from './utils/serialize.auth';
+import { GoogleAuthStrategy } from './strategy/google-strategy';
 
 @Module({
   imports: [
@@ -21,6 +21,7 @@ import { SessionSerializer } from './utils/serialize.auth';
     PrismaService,
     JwtStrategy,
     AtlassianStrategy,
+    GoogleAuthStrategy,
     SessionSerializer,
   ],
   controllers: [AuthController],
