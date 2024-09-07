@@ -36,12 +36,18 @@ enum Status {
   BLOCKED
 }
 
+enum CredentialsOrigin {
+  ATLASSIAN
+  OWN
+}
+
 model User {
   id                  String             @id @default(auto()) @map("_id") @db.ObjectId
   firstName           String
   lastName            String
   email               String             @unique()
   password            String
+  credentialsOrigin   CredentialsOrigin  @default(OWN)
   status              Status             @default(ACTIVE)
   role                UserRole           @default(USER)
   collections         Collection[] 

@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, SignInUserDto } from './dto-for-auth/';
+import {
+  AssociatedUserDto,
+  CreateUserDto,
+  SignInUserDto,
+} from './dto-for-auth/';
 import { PrismaService } from 'src/prisma.service';
 import { handleAuthErrors } from 'src/decorators/handle-auth-errors';
 import { JwtService } from '@nestjs/jwt';
 import { hash, compare } from 'bcrypt';
 import {
+  AccessTokenAndProviderToken,
   ApiSuccessFullResponseWithMetaData,
   Token,
 } from 'src/types/api-successful-response';
@@ -63,6 +68,67 @@ export class AuthService {
       email: dbUser.email,
       role: dbUser.role,
     };
+    return { data, metaData: { access_token } };
+  }
+
+  @handleAuthErrors()
+  async validateUser(
+    user: AssociatedUserDto,
+  ): Promise<
+    ApiSuccessFullResponseWithMetaData<
+      UserWithOutPassword,
+      AccessTokenAndProviderToken
+    >
+  > {
+    const dbUser = await this.prismaService.user.upsert({
+      where: { email: user.email },
+      update: { email: user.email },
+      create: {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        password: '',
+        credentialsOrigin: user.origin,
+      },
+    });
+
+    const access_token = await this.jwtService.signAsync({
+      id: dbUser.id,
+      email: dbUser.email,
+      role: dbUser.role,
+    });
+    const data = {
+      firstName: dbUser.firstName,
+      email: dbUser.email,
+      role: dbUser.role,
+    };
+
+    return {
+      data,
+      metaData: { access_token, providerAccessToken: user.providerAccessToken },
+    };
+  }
+
+  @handleAuthErrors()
+  async findUser(
+    email: string,
+  ): Promise<ApiSuccessFullResponseWithMetaData<UserWithOutPassword, Token>> {
+    const dbUser = await this.prismaService.user.findFirstOrThrow({
+      where: { email: email },
+    });
+
+    const access_token = await this.jwtService.signAsync({
+      id: dbUser.id,
+      email: dbUser.email,
+      role: dbUser.role,
+    });
+
+    const data = {
+      firstName: dbUser.firstName,
+      email: dbUser.email,
+      role: dbUser.role,
+    };
+
     return { data, metaData: { access_token } };
   }
 }

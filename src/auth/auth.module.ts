@@ -4,6 +4,9 @@ import { AuthController } from './auth.controller';
 import { PrismaService } from 'src/prisma.service';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategy';
+import { AtlassianStrategy } from './strategy/atlassian-jira';
+import { PassportModule } from '@nestjs/passport';
+import { SessionSerializer } from './utils/serialize.auth';
 
 @Module({
   imports: [
@@ -13,7 +16,13 @@ import { JwtStrategy } from './strategy';
       signOptions: { expiresIn: '5d' },
     }),
   ],
-  providers: [AuthService, PrismaService, JwtStrategy],
+  providers: [
+    AuthService,
+    PrismaService,
+    JwtStrategy,
+    AtlassianStrategy,
+    SessionSerializer,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

@@ -1,7 +1,23 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Redirect,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, SignInUserDto } from './dto-for-auth';
 import { Public } from 'src/decorators/public-route';
+import { AtlassianGuard } from './guards/guard-for-atlassian';
+import { GetUser } from 'src/decorators/get-user';
+import {
+  AccessTokenAndProviderToken,
+  ApiSuccessFullResponseWithMetaData,
+  Token,
+} from 'src/types/api-successful-response';
+import { UserWithOutPassword } from 'src/types/user';
 
 @Controller('auth')
 export class AuthController {
@@ -17,5 +33,31 @@ export class AuthController {
   @Post(`signin`)
   signin(@Body() signinUser: SignInUserDto) {
     return this.authService.signin(signinUser);
+  }
+
+  @Public()
+  @Get(`atlassian-signin`)
+  @UseGuards(AtlassianGuard)
+  handleAtlassianSignin() {
+    // return this.authService.signin(signinUser);
+  }
+
+  @Public()
+  @Get(`atlassian-jira/redirect`)
+  @UseGuards(AtlassianGuard)
+  @Redirect()
+  handleAtlassianJira(
+    @GetUser()
+    user: ApiSuccessFullResponseWithMetaData<
+      UserWithOutPassword,
+      AccessTokenAndProviderToken
+    >,
+  ) {
+    console.log(user.metaData);
+    //TODO remover todos los consol.log
+    return {
+      url: `${process.env.REDIRECT_BASE_URL}/auth/login?access_token=${user.metaData.access_token}&providerAccessToken=${user.metaData.providerAccessToken}`,
+    };
+    // return this.authService.signin(signinUser);
   }
 }
