@@ -23,7 +23,6 @@ import { UserPreferencesModule } from './user-preferences/user-preferences.modul
 import { CommentsWebSocketModule } from './comments-web-socket/comments-web-socket.module';
 import { ItemsTagsModule } from './items-tags/items-tags.module';
 import { PassportModule } from '@nestjs/passport';
-import { AtlassianJiraModule } from './atlassian-jira/atlassian-jira.module';
 
 @Module({
   imports: [
@@ -41,7 +40,6 @@ import { AtlassianJiraModule } from './atlassian-jira/atlassian-jira.module';
     CommentsWebSocketModule,
     ItemsTagsModule,
     PassportModule.register({ session: true }),
-    AtlassianJiraModule,
   ],
   controllers: [AppController, CustomFieldsController],
   providers: [
