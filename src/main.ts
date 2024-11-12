@@ -4,7 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/guards/guard-for-jwt';
 import * as session from 'express-session';
 import * as passport from 'passport';
-
+import { PrismaExceptionFilter } from './utils/exception-filters/exception';
+import { AuthPrismaExceptionFilter } from './auth/utils/auth-exception-filters/auth-exception-filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
@@ -22,6 +23,7 @@ async function bootstrap() {
   app.use(passport.initialize());
   app.use(passport.session());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalFilters(new PrismaExceptionFilter());
   await app.listen(3001);
 }
 bootstrap();

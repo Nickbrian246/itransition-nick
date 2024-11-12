@@ -6,7 +6,6 @@ import {
   UpdateCustomFieldByIdDto,
   UpdateCustomFieldDto,
 } from './dto-for-custom-fields';
-import { errorHandler } from 'src/decorators/error-handler';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { CustomFields } from '@prisma/client';
 
@@ -14,7 +13,6 @@ import { CustomFields } from '@prisma/client';
 export class CustomFieldsService {
   constructor(private prismaService: PrismaService) {}
 
-  @errorHandler()
   async getCustomFieldsByCollectionId(
     id: string,
   ): Promise<ApiSuccessFullResponse<CustomFields[]>> {
@@ -25,7 +23,6 @@ export class CustomFieldsService {
     return { data };
   }
 
-  @errorHandler()
   async createManyCustomFields(customFields: CreateCustomFieldsDto) {
     if (customFields.customFields.length === 0) return;
     const fields = customFields.customFields.map((field) => ({
@@ -37,7 +34,6 @@ export class CustomFieldsService {
     await this.prismaService.customFields.createMany({ data: fields });
   }
 
-  @errorHandler()
   async updateCustomFieldById(id: string, customField: UpdateCustomFieldDto) {
     return await this.prismaService.customFields.update({
       where: { id: id },
@@ -45,7 +41,6 @@ export class CustomFieldsService {
     });
   }
 
-  @errorHandler()
   async updateManyCustomFieldById(customFields: UpdateCustomFieldByIdDto[]) {
     const updatePromises = customFields.map((field) =>
       this.prismaService.customFields.update({
@@ -59,12 +54,10 @@ export class CustomFieldsService {
     return await this.prismaService.$transaction(updatePromises);
   }
 
-  @errorHandler()
   async deleteById(id: string) {
     await this.prismaService.customFields.delete({ where: { id: id } });
   }
 
-  @errorHandler()
   async deleteManyById(customFieldsId: CustomFieldIdDto[]) {
     const data = customFieldsId.map((fieldId) =>
       this.prismaService.customFields.delete({ where: { id: fieldId.id } }),

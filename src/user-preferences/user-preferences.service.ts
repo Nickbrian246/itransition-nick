@@ -4,13 +4,11 @@ import { CreateUserPreferenceDto } from './dto-for-createUserPreference/dto-for-
 import { UserDecoded } from 'src/types/user';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { $Enums, UserPreferences } from '@prisma/client';
-import { errorHandler } from 'src/decorators/error-handler';
 
 @Injectable()
 export class UserPreferencesService {
   constructor(private prismaService: PrismaService) {}
 
-  @errorHandler()
   async getUserPreferenceById(
     id: string,
   ): Promise<ApiSuccessFullResponse<UserPreferences>> {
@@ -21,7 +19,6 @@ export class UserPreferencesService {
     return { data };
   }
 
-  @errorHandler()
   async createOrUpdate(
     preference: CreateUserPreferenceDto,
     user: UserDecoded,

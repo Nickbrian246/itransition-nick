@@ -29,9 +29,6 @@ export class AtlassianStrategy extends PassportStrategy(Strategy, 'atlassian') {
   // Passport se encargará de obtener el accessToken y refreshToken, y llamará a esta función
   async validate(accessToken: string, refreshToken: string, profile: any) {
     // Aquí puedes manejar el perfil del usuario e implementar la lógica para crear/verificar usuarios en tu sistema
-    console.log('Access Token:', accessToken);
-    console.log('Refresh Token:', refreshToken);
-    console.log('Profile:', profile);
 
     const req = await fetch('https://api.atlassian.com/me', {
       headers: {
@@ -52,7 +49,6 @@ export class AtlassianStrategy extends PassportStrategy(Strategy, 'atlassian') {
     };
     const userValidated = await this.authService.validateUser(user);
     // Retorna los datos del usuario autenticado o crea un nuevo usuario en la base de datos
-    console.log(userValidated, 'created user ');
 
     return userValidated;
   }
