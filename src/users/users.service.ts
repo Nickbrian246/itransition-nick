@@ -2,14 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { $Enums, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
-import { errorHandler } from 'src/decorators/error-handler';
 import { UpdateRolesDto, UsersDto } from './dto-for-user';
 
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  @errorHandler()
   async getAllUsers(): Promise<
     ApiSuccessFullResponse<
       {
@@ -37,7 +35,6 @@ export class UsersService {
     return { data };
   }
 
-  @errorHandler()
   async getUserById(
     id: string,
   ): Promise<
@@ -55,7 +52,6 @@ export class UsersService {
     return { data };
   }
 
-  @errorHandler()
   async getUserByIdWithCollections(
     id: string,
   ): Promise<ApiSuccessFullResponse<User>> {
@@ -66,7 +62,6 @@ export class UsersService {
     return { data };
   }
 
-  @errorHandler()
   async changeRoleByUsersIds(roles: UpdateRolesDto) {
     const { role, usersIds } = roles;
     for (let user of usersIds) {
@@ -77,7 +72,6 @@ export class UsersService {
     }
   }
 
-  @errorHandler()
   async BlockByUsersIds(users: UsersDto) {
     const { usersIds } = users;
     for (let user of usersIds) {
@@ -90,7 +84,6 @@ export class UsersService {
     }
   }
 
-  @errorHandler()
   async unLockByUserId(users: UsersDto) {
     const { usersIds } = users;
     for (let user of usersIds) {
@@ -103,7 +96,6 @@ export class UsersService {
     }
   }
 
-  @errorHandler()
   async deleteUserById(id: string): Promise<ApiSuccessFullResponse<User>> {
     const collections = await this.prismaService.collection.findMany({
       where: { userId: id },

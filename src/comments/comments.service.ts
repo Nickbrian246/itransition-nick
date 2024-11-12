@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { errorHandler } from 'src/decorators/error-handler';
 import { PrismaService } from 'src/prisma.service';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { Comments } from '@prisma/client';
@@ -14,7 +13,6 @@ export class CommentsService {
     private commentsGateway: CommentsWebSocketGateway,
   ) {}
 
-  @errorHandler()
   async getCommentById(id: string): Promise<ApiSuccessFullResponse<Comments>> {
     const data = await this.prismaService.comments.findFirstOrThrow({
       where: { id },
@@ -22,7 +20,7 @@ export class CommentsService {
 
     return { data };
   }
-  @errorHandler()
+
   async getCommentsByItemId(
     id: string,
   ): Promise<ApiSuccessFullResponse<Comments[]>> {
@@ -35,7 +33,6 @@ export class CommentsService {
     return { data };
   }
 
-  @errorHandler()
   async createComment(
     comment: CreateCommentDto,
     user: UserDecoded,
@@ -52,7 +49,6 @@ export class CommentsService {
     return { data };
   }
 
-  @errorHandler()
   async updateCommentById(
     id: string,
     comments: UpdateCommentDto,
@@ -64,7 +60,6 @@ export class CommentsService {
     return { data };
   }
 
-  @errorHandler()
   async deleteCommentById(
     id: string,
   ): Promise<ApiSuccessFullResponse<Comments>> {

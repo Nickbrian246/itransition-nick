@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
 import {
   AssociatedUserDto,
   CreateUserDto,
@@ -22,7 +22,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  @handleAuthErrors()
+  // @handleAuthErrors()
   async signup(
     user: CreateUserDto,
   ): Promise<ApiSuccessFullResponseWithMetaData<UserWithOutPassword, Token>> {
@@ -48,7 +48,7 @@ export class AuthService {
     };
   }
 
-  @handleAuthErrors()
+  // @handleAuthErrors()
   async signin(
     user: SignInUserDto,
   ): Promise<ApiSuccessFullResponseWithMetaData<UserWithOutPassword, Token>> {
@@ -56,7 +56,7 @@ export class AuthService {
       where: { email: user.email },
     });
     const IsMatchPassword = await compare(user.password, dbUser.password);
-    if (!IsMatchPassword) throw new Error(`Incorrect password`);
+    if (!IsMatchPassword) throw new BadRequestException(`Incorrect password`);
 
     const access_token = await this.jwtService.signAsync({
       id: dbUser.id,
@@ -71,7 +71,7 @@ export class AuthService {
     return { data, metaData: { access_token } };
   }
 
-  @handleAuthErrors()
+  // @handleAuthErrors()
   async validateUser(
     user: AssociatedUserDto,
   ): Promise<
@@ -109,7 +109,7 @@ export class AuthService {
     };
   }
 
-  @handleAuthErrors()
+  // @handleAuthErrors()
   async findUser(
     email: string,
   ): Promise<ApiSuccessFullResponseWithMetaData<UserWithOutPassword, Token>> {

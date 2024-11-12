@@ -9,14 +9,12 @@ import { CreateCategoryDto } from './dto-for-categories/dto-for-create-category'
 export class CategoriesService {
   constructor(private prismaService: PrismaService) {}
 
-  @errorHandler()
   async getAllCategories(): Promise<ApiSuccessFullResponse<Category[]>> {
     const data = await this.prismaService.category.findMany();
 
     return { data };
   }
 
-  @errorHandler()
   async createCategory(
     category: CreateCategoryDto,
   ): Promise<ApiSuccessFullResponse<Category>> {

@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { LikeDto } from './dto-for-likes';
-import { errorHandler } from 'src/decorators/error-handler';
 import {
   ApiSuccessFullResponse,
   likesData,
@@ -13,13 +11,11 @@ import { UserDecoded } from 'src/types/user';
 export class LikesService {
   constructor(private prismaService: PrismaService) {}
 
-  @errorHandler()
   async getAllLikes(): Promise<ApiSuccessFullResponse<Likes[]>> {
     const data = await this.prismaService.likes.findMany({});
     return { data };
   }
 
-  @errorHandler()
   async getLikesByItemId(
     id: string,
     user: UserDecoded,
@@ -39,7 +35,6 @@ export class LikesService {
     };
   }
 
-  @errorHandler()
   async createLike(
     itemId: string,
     user: UserDecoded,
@@ -62,7 +57,6 @@ export class LikesService {
     };
   }
 
-  @errorHandler()
   async deleteLike(
     itemId: string,
     user: UserDecoded,

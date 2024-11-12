@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Collection, Prisma } from '@prisma/client';
-import { errorHandler } from 'src/decorators/error-handler';
 import { PrismaService } from 'src/prisma.service';
 import { ApiSuccessFullResponse } from 'src/types/api-successful-response';
 import { UserDecoded } from 'src/types/user';
@@ -12,7 +11,7 @@ import {
 @Injectable()
 export class CollectionsService {
   constructor(private prisma: PrismaService) {}
-  @errorHandler()
+
   async getCollectionById(
     id: string,
   ): Promise<ApiSuccessFullResponse<Collection>> {
@@ -27,7 +26,6 @@ export class CollectionsService {
     return { data };
   }
 
-  @errorHandler()
   async getCollectionItemsById(collectionId: string) {
     return await this.prisma.collection.findFirstOrThrow({
       where: { id: collectionId },
@@ -35,7 +33,6 @@ export class CollectionsService {
     });
   }
 
-  @errorHandler()
   async getUserCollections(
     userId: string,
   ): Promise<ApiSuccessFullResponse<Collection[]>> {
@@ -53,7 +50,6 @@ export class CollectionsService {
     return { data };
   }
 
-  @errorHandler()
   async getLatestCollections(): Promise<ApiSuccessFullResponse<Collection[]>> {
     const data = await this.prisma.collection.findMany({
       include: { items: true },
@@ -63,7 +59,6 @@ export class CollectionsService {
     return { data };
   }
 
-  @errorHandler()
   async getCollectionAndCustomFields(id: string) {
     return await this.prisma.collection.findMany({
       where: { id: id },
@@ -71,7 +66,6 @@ export class CollectionsService {
     });
   }
 
-  @errorHandler()
   async createMy(
     collection: CreateCollectionDto,
     user: UserDecoded,
@@ -90,7 +84,6 @@ export class CollectionsService {
     return { data };
   }
 
-  @errorHandler()
   async updateCollectionById(
     collection: UpdateCollectionDto,
     collectionId: string,
@@ -111,7 +104,6 @@ export class CollectionsService {
     return { data };
   }
 
-  @errorHandler()
   async deleteCollectionById(collectionId: string) {
     const itemsIds = await this.prisma.item.findMany({
       where: { collectionId },

@@ -5,6 +5,7 @@ import {
   Post,
   Redirect,
   Req,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -20,7 +21,9 @@ import {
 import { UserWithOutPassword } from 'src/types/user';
 import { GoogleAuthGuard } from './guards/guard-for-google';
 import { GithubAuthGuard } from './guards/guard-for-github';
+import { AuthPrismaExceptionFilter } from './utils/auth-exception-filters/auth-exception-filter';
 
+@UseFilters(AuthPrismaExceptionFilter)
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
